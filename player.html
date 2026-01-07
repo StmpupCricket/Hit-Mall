@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PrimeStream Player</title>
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Plyr CSS -->
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css"/>
+
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+<style>
+  body {
+    background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+    font-family: Inter, system-ui, sans-serif;
+  }
+
+  .glass {
+    background: rgba(15,15,35,0.7);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .plyr--video {
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .plyr__control--overlaid {
+    background: linear-gradient(135deg,#8b5cf6,#3b82f6);
+  }
+
+  .gradient-text {
+    background: linear-gradient(90deg,#8b5cf6,#3b82f6,#10b981);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+</style>
+</head>
+
+<body class="text-white min-h-screen">
+
+<!-- Header -->
+<header class="glass sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center">
+        <span class="material-icons-round">play_circle</span>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold gradient-text">PrimeStream</h1>
+        <p class="text-xs text-white/60">Premium Player</p>
+      </div>
+    </div>
+
+    <button onclick="history.back()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10">
+      <span class="material-icons-round">arrow_back</span>
+      <span class="text-sm">Back</span>
+    </button>
+  </div>
+</header>
+
+<!-- Player Section -->
+<main class="max-w-7xl mx-auto px-4 py-8">
+  <div class="glass rounded-2xl p-4 md:p-6">
+
+    <!-- Title -->
+    <h2 id="videoTitle" class="text-2xl md:text-3xl font-bold mb-4"></h2>
+
+    <!-- Player -->
+    <video
+      id="player"
+      class="plyr w-full"
+      playsinline
+      controls
+      poster=""
+    ></video>
+
+    <!-- Meta -->
+    <div class="flex flex-wrap gap-4 mt-6 text-sm text-white/70">
+      <div class="flex items-center gap-2">
+        <span class="material-icons-round text-purple-400">hd</span>
+        4K Premium Stream
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="material-icons-round text-green-400">verified</span>
+        Secure Playback
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="material-icons-round text-blue-400">play_circle</span>
+        Ad-Free
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Plyr JS -->
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+
+<script>
+/* ---------------- PARAMS ---------------- */
+const params = new URLSearchParams(location.search);
+const title = params.get("title") || "Premium Video";
+const url   = params.get("url");
+const thumb = params.get("thumb");
+
+/* ---------------- INIT ---------------- */
+document.getElementById("videoTitle").textContent = title;
+
+const video = document.getElementById("player");
+
+if (thumb) video.setAttribute("poster", thumb);
+
+if (url) {
+  video.innerHTML = `
+    <source src="${url}" type="application/x-mpegURL">
+  `;
+}
+
+/* ---------------- PLYR ---------------- */
+const player = new Plyr(video, {
+  autoplay: true,
+  controls: [
+    'play-large','play','progress','current-time',
+    'mute','volume','settings','fullscreen'
+  ],
+  settings: ['quality','speed'],
+});
+</script>
+
+</body>
+</html>
